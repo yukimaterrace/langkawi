@@ -42,4 +42,13 @@ module ApiErrors
       @exception = "invalid keys: #{ invalid_keys }"
     end
   end
+
+  class IdenticalUserError < BaseError
+    
+    def initialize
+      @status = :forbidden
+      @error = "同一ユーザーは禁止されています。"
+      @exception = "identical user is forbidden"
+    end
+  end
 end

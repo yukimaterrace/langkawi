@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_08_13_041520) do
+ActiveRecord::Schema[7.0].define(version: 2022_08_24_135928) do
   create_table "accounts", force: :cascade do |t|
     t.integer "account_type"
     t.string "email"
@@ -19,6 +19,18 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_13_041520) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_accounts_on_email", unique: true
+  end
+
+  create_table "relations", force: :cascade do |t|
+    t.integer "user_from_id"
+    t.integer "user_to_id"
+    t.integer "status"
+    t.datetime "action_a_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "action_b_date"
+    t.datetime "action_c_date"
+    t.index ["user_from_id", "user_to_id"], name: "index_relations_on_user_from_id_and_user_to_id", unique: true
   end
 
   create_table "users", force: :cascade do |t|

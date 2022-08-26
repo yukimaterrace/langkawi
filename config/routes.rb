@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     post '/logout', to: 'login#logout'
 
     resources :accounts
-    resources :users, :except => [ :create, :destroy ]
+    resources :users, :except => [:create, :destroy]
+    resources :relations, :except => :show
   end
 end
