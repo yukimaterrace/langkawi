@@ -5,6 +5,7 @@ Rails.application.routes.draw do
 
     resources :accounts
     resources :users, :except => [:create, :destroy]
-    resources :relations, :except => :show
+    resources :relations, :except => [:show, :destroy]
+    resources :talks, :except => [:show, :destroy]
   end
 end

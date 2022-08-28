@@ -2,6 +2,7 @@ class UsersController < ApplicationController
   include ParamsValidator
 
   before_action :require_owner, only: :update, unless: proc { @user.admin? }
+  before_action :set_pager_params, only: :index
 
   def initialize
     @resource_sym = :user
@@ -12,7 +13,7 @@ class UsersController < ApplicationController
   end
 
   def index
-    render :json => User.all
+    render :json => pager_response(User)
   end
 
   def show

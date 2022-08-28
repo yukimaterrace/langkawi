@@ -14,7 +14,9 @@ class Relation < ApplicationRecord
   belongs_to :user_from, class_name: 'User', :foreign_key => 'user_from_id'
   belongs_to :user_to, class_name: 'User', :foreign_key => 'user_to_id'
 
-  def extract_date
-    self.slice(:action_a_date, :action_b_date, :action_c_date)
+  has_many :talks, dependent: :destroy
+
+  def extract_id_date
+    self.slice(:id, :action_a_date, :action_b_date, :action_c_date)
   end
 end
