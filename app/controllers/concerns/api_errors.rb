@@ -34,6 +34,15 @@ module ApiErrors
     end
   end
 
+  class OwnersRequiredError < BaseError
+    
+    def initialize
+      @status = :forbidden
+      @error = '本人たちであることが必要です。'
+      @exception = 'Owners is required.'
+    end
+  end
+
   class ParamsValidationError < BaseError
 
     def initialize(invalid_keys)
@@ -49,6 +58,24 @@ module ApiErrors
       @status = :forbidden
       @error = "同一ユーザーは禁止されています。"
       @exception = "identical user is forbidden"
+    end
+  end
+
+  class AcceptedStatusError < BaseError
+
+    def initialize
+      @status = :forbidden
+      @error = "交際中であることが必要です。"
+      @exception = "accepted status is required."
+    end
+  end
+
+  class EnabledStatusError < BaseError
+
+    def initialize
+      @status = :forbidden
+      @error = "有効状態であることが必要です。"
+      @exception = "enabled status is required."
     end
   end
 end
