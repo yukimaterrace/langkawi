@@ -3,6 +3,7 @@ class ApplicationController < ActionController::API
 
   include Authenticator
   include ResponseJson
+  include Pager
   include ApiErrors
 
   before_action :authenticate

@@ -1,14 +1,15 @@
 class RelationsController < ApplicationController
+  before_action :set_pager_params, only: :index
   
   def index
-    lists = Relation.statuses.collect_concat do |status|
-      [index_user_to_item(status), index_user_from_item(status) ]
-    end
+    position_status = params.require(:position_status)
+    validate_position_status(position_status)
 
-    resp = position_statuses.zip(lists).map do |position_status, list|
-      { position_status: position_status, list: list }
-    end
+    cond, user = user_item_condition(position_status)
 
+    resp = pager_response(cond) do |r|
+      { user: user::(r) }.merge(r.extract_id_date)
+    end
     render :json => resp
   end
 
@@ -53,22 +54,38 @@ class RelationsController < ApplicationController
     Relation.statuses.map(&:first).map { |s| "#{s}_#{suffix}"}
   end
 
-  def index_user_from_item(status)
-    Relation.where(user_to_id: @user.id, status: status).eager_load(:user_from).all.map do |r|
-      { user: r.user_from }.merge(r.extract_date)
+  def user_item_condition(position_status)
+    status, position = position_status.split('_')
+    case position.to_sym
+    when :me then
+      user_to_item_condition(status)
+    else
+      user_from_item_condition(status)
     end
+  end
+
+  def user_from_item_condition(status)
+    [
+      Relation.where(user_to_id: @user.id, status: status).eager_load(:user_from),
+      proc { |r| r.user_from }
+    ]
   end 
 
-  def index_user_to_item(status)
-    Relation.where(user_from_id: @user.id, status: status).eager_load(:user_to).all.map do |r|
-      { user: r.user_to }.merge(r.extract_date)
+  def user_to_item_condition(status)
+    [
+      Relation.where(user_from_id: @user.id, status: status).eager_load(:user_to),
+      proc { |r| r.user_to }
+    ]
+  end
+
+  def validate_position_status(position_status)
+    unless position_statuses.include? position_status
+      raise ApiErrors::ParamsValidationError, position_status
     end
   end
 
   def validate_update_param(position_status, status)
-    unless position_statuses.include? position_status
-      raise ApiErrors::ParamsValidationError, position_status
-    end
+    validate_position_status(position_status)
 
     permitted_statuses =
       case position_status.to_sym
