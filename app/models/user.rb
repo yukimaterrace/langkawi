@@ -4,5 +4,7 @@ class User < ApplicationRecord
 
   belongs_to :account
 
+  has_one :detail, class_name: 'UserDetail', :foreign_key => 'user_id', dependent: :destroy
+
   validates :user_type, presence: true
 end

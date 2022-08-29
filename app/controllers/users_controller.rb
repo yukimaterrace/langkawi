@@ -13,12 +13,12 @@ class UsersController < ApplicationController
   end
 
   def index
-    render :json => pager_response(User)
+    render :json => pager_response(User.eager_load(:detail)), include: :detail
   end
 
   def show
     id = params.require(:id)
-    render :json => User.find(id)
+    render :json => User.eager_load(:detail).find(id), include: :detail
   end
 
   def update
