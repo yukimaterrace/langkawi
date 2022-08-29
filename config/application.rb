@@ -26,5 +26,9 @@ module Langkawi
 
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use ActionDispatch::Session::CookieStore
+
+    CarrierWave.configure do |config|
+      config.asset_host = 'http://localhost:3000'
+    end
   end
 end
