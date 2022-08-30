@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
   scope :api do
+    get '/health_check', to: 'system#health_check'
+    
     post '/login', to: 'login#login'
     post '/logout', to: 'login#logout'
 
