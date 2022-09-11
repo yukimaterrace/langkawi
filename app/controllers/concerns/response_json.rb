@@ -8,11 +8,10 @@ module ResponseJson
     render :json => { message: message }
   end
 
-  def error_json(status, error, exception: nil)
+  def error_json(error, exception: nil)
     render :json => {
-      status: status,
       error: error,
       exception: exception
-    }, status: status
+    }, status: error
   end
 end
