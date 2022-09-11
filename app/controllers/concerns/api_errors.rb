@@ -1,6 +1,6 @@
 module ApiErrors
   class BaseError < StandardError
-    attr_reader :status, :error, :exception
+    attr_reader :error, :exception
 
     def initialize
       raise NotImplementedError
@@ -10,72 +10,64 @@ module ApiErrors
   class UnauthorizedError < BaseError
     
     def initialize
-      @status = :unauthorized
-      @error = 'ログインが必要です。'
-      @exception = 'login is required.'
+      @error = :unauthorized
+      @exception = 'ログインが必要です。'
     end
   end
 
   class AdminRequiredError < BaseError
 
     def initialize
-      @status = :forbidden
-      @error = '管理者権限が必要です。 '
-      @exception = 'Admin permission is required.'
+      @error = :forbidden
+      @exception = '管理者権限が必要です。 '
     end
   end
 
   class OwnerRequiredError < BaseError
     
     def initialize
-      @status = :forbidden
-      @error = '本人であることが必要です。'
-      @exception = 'Owner is required.'
+      @error = :forbidden
+      @exception = '本人であることが必要です。'
     end
   end
 
   class OwnersRequiredError < BaseError
     
     def initialize
-      @status = :forbidden
-      @error = '本人たちであることが必要です。'
-      @exception = 'Owners is required.'
+      @error = :forbidden
+      @exception = '本人たちであることが必要です。'
     end
   end
 
   class ParamsValidationError < BaseError
 
     def initialize(invalid_keys)
-      @status = :forbidden
-      @error = "不正なキー: #{ invalid_keys }"
-      @exception = "invalid keys: #{ invalid_keys }"
+      @error = :forbidden
+      @exception = "不正なキー: #{ invalid_keys }"
     end
   end
 
   class IdenticalUserError < BaseError
     
     def initialize
-      @status = :forbidden
-      @error = "同一ユーザーは禁止されています。"
-      @exception = "identical user is forbidden"
+      @error =:forbidden
+      @exception = "同一ユーザーは禁止されています。"
     end
   end
 
   class AcceptedStatusError < BaseError
 
     def initialize
-      @status = :forbidden
-      @error = "交際中であることが必要です。"
-      @exception = "accepted status is required."
+      @error = :forbidden
+      @exception = "交際中であることが必要です。"
     end
   end
 
   class EnabledStatusError < BaseError
 
     def initialize
-      @status = :forbidden
-      @error = "有効状態であることが必要です。"
-      @exception = "enabled status is required."
+      @error = :forbidden
+      @exception = "有効状態であることが必要です。"
     end
   end
 end

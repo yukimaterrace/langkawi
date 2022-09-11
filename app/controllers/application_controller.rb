@@ -9,6 +9,6 @@ class ApplicationController < ActionController::API
   before_action :authenticate
 
   rescue_from ApiErrors::BaseError do |error|
-    error_json error.status, error.error, exception: error.exception
+    error_json error.error, exception: error.exception
   end
 end
