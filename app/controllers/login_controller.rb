@@ -7,7 +7,7 @@ class LoginController < ApplicationController
     account = Account.eager_load(:user).where(email: email, password: password).first!
 
     uuid = SecureRandom.uuid
-    session[uuid] = account.user.id
+    SessionHolder.put(uuid, account.user.id)
     render :json => { token: uuid }
   end
 
