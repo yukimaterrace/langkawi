@@ -1,6 +1,4 @@
 class ApplicationController < ActionController::API
-  include ActionController::Cookies
-
   include Authenticator
   include ResponseJson
   include Pager
