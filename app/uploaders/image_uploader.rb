@@ -23,9 +23,9 @@ class ImageUploader < CarrierWave::Uploader::Base
   # process scale: [200, 300]
   process resize_to_fit: [200, 200], if: :picture_a?
 
-  version :thumb do
-    process resize_to_fit: [100, 100], if: :picture_a?
-  end
+  # version :thumb do
+  #   process resize_to_fit: [100, 100], if: :picture_a?
+  # end
 
   def picture_a? image
     mounted_as.to_sym == :picture_a

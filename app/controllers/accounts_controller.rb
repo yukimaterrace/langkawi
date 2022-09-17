@@ -1,14 +1,14 @@
 class AccountsController < ApplicationController
   skip_before_action :authenticate, only: :create
   before_action :require_admin, except: :create
+  before_action :set_pager_params, only: :index
 
   def initialize
     @include = { :include => :user }
   end
 
   def index
-    accounts = Account.eager_load(:user).all
-    render :json => accounts, **@include
+    render :json => pager_response(Account.eager_load(:user)), **@include
   end
 
   def create
