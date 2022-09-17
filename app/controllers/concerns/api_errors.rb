@@ -55,6 +55,14 @@ module ApiErrors
     end
   end
 
+  class CounterRelationExistError < BaseError
+  
+    def initialize
+      @error =:forbidden
+      @exception = "逆の関係が既に存在します。"
+    end
+  end
+
   class AcceptedStatusError < BaseError
 
     def initialize

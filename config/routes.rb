@@ -10,7 +10,7 @@ Rails.application.routes.draw do
     resources :user_details, :except => [:index, :show, :destroy] do
       post '/picture_a', to: 'user_details#upload_picture_a'
     end
-    resources :relations, :except => [:show, :destroy]
+    resources :relations, :except => [:destroy]
     resources :talks, :except => [:show, :destroy]
   end
 end
