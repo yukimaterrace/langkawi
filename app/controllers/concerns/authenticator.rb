@@ -4,7 +4,7 @@ module Authenticator
 
   def authenticate
     authenticate_with_http_token do |token, options|
-      user_id = SessionHolder.get(token)
+      user_id = Session.get(token)
       @user = user_id && User.find(user_id)
       user_id.present?
     end || (raise ApiErrors::UnauthorizedError)
