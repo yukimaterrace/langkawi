@@ -8,7 +8,7 @@ class LoginController < ApplicationController
 
     uuid = SecureRandom.uuid
     Session.put(uuid, account.user.id)
-    render :json => { token: uuid }
+    render :json => { token: uuid, user_id: account.user.id }
   end
 
   def logout
