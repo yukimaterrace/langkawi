@@ -7,7 +7,7 @@ class RelationsController < ApplicationController
 
     cond = user_item_condition(position_status)
 
-    resp = pager_response(cond) do |r|
+    resp = pager_response(cond.order(updated_at: :desc)) do |r|
       relation_response(r)
     end
     render :json => resp, include: :detail
