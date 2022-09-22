@@ -13,7 +13,7 @@ class UsersController < ApplicationController
   end
 
   def index
-    render :json => pager_response(User.eager_load(:detail)), include: :detail
+    render :json => pager_response(User.eager_load(:detail).order(updated_at: :desc)), include: :detail
   end
 
   def show
