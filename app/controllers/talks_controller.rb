@@ -1,11 +1,13 @@
 class TalksController < ApplicationController
-  before_action :set_pager_params, only: :index
+  include RelationService
+
+  before_action :set_pager_params, only: [:index, :index_rooms]
 
   def index
     relation_id = params.require(:relation_id)
     validate_owners(Relation.find(relation_id))
 
-    render :json => pager_response(Talk.where(relation_id: relation_id))
+    render :json => pager_response(Talk.where(relation_id: relation_id).order(created_at: :desc))
   end
 
   def create
@@ -30,6 +32,21 @@ class TalksController < ApplicationController
     validate_update_param(t, talk)
 
     render :json => Talk.update(id, talk)
+  end
+
+  def index_rooms
+    talk_ids = Talk.joins(:relation).merge(
+        Relation.where(user_from_id: @user.id).or(Relation.where(user_to_id: @user.id))
+    )
+    .group(:relation_id)
+    .select('talks.id as id, max(talks.updated_at) as updated_at')
+    .map { |talk| talk.id }
+
+    talks = Talk.where(id: talk_ids, status: :enabled).eager_load(:relation)
+    relations = talks.map { |talk| relation_response(talk.relation) }
+    resp = talks.zip(relations).map { |talk, relation| {relation: relation, last_talk: talk} }
+
+    render :json => resp
   end
 
   private
