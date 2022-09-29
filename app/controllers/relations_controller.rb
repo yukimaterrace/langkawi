@@ -1,4 +1,6 @@
 class RelationsController < ApplicationController
+  include RelationService
+
   before_action :set_pager_params, only: :index
   
   def index
@@ -61,49 +63,29 @@ class RelationsController < ApplicationController
 
   private
 
-  def find_relation(counter_user_id)
-    Relation
-      .where(user_from_id: @user.id, user_to_id: counter_user_id)
-      .or(Relation.where(user_from_id: counter_user_id, user_to_id: @user.id))
-      .eager_load(user_from: :detail, user_to: :detail)
-      .first!
-  end
-
-  def counter_user(relation)
-    if relation.user_from_id == @user.id then
-      relation.user_to
-    else
-      relation.user_from
+  def validate_update_param(position_status, status)
+    validate_position_status(position_status)
+    unless permitted_transition_statuses(position_status).include? status.to_sym
+      raise ApiErrors::ParamsValidationError, status
     end
   end
 
-  def position_status(relation)
-    if relation.user_from_id == @user.id then
-      "#{relation.status}_me"
-    else
-      "#{relation.status}_you"
+  def validate_position_status(position_status)
+    unless position_statuses.include? position_status
+      raise ApiErrors::ParamsValidationError, position_status
     end
-  end
-
-  def relation_response(relation)
-    position_status = position_status(relation)
-    {
-      user: counter_user(relation),
-      position_status: position_status,
-      next_statuses: permitted_transition_statuses(position_status)
-    }.merge(relation.extract_id_date)
   end
 
   def render_relation_response(relation)
     render :json => relation_response(relation), include: :detail
   end
 
-  def position_statuses
-    statues_with("me").zip(statues_with "you").flatten
-  end
-
-  def statues_with(suffix)
-    Relation.statuses.map(&:first).map { |s| "#{s}_#{suffix}"}
+  def find_relation(counter_user_id)
+    Relation
+      .where(user_from_id: @user.id, user_to_id: counter_user_id)
+      .or(Relation.where(user_from_id: counter_user_id, user_to_id: @user.id))
+      .eager_load(user_from: :detail, user_to: :detail)
+      .first!
   end
 
   def user_item_condition(position_status)
@@ -117,41 +99,11 @@ class RelationsController < ApplicationController
   end
 
   def user_from_item_condition(status)
-      Relation.where(user_to_id: @user.id, status: status).eager_load(user_from: :detail)
+    Relation.where(user_to_id: @user.id, status: status).eager_load(user_from: :detail)
   end 
 
   def user_to_item_condition(status)
       Relation.where(user_from_id: @user.id, status: status).eager_load(user_to: :detail)
-  end
-
-  def validate_position_status(position_status)
-    unless position_statuses.include? position_status
-      raise ApiErrors::ParamsValidationError, position_status
-    end
-  end
-
-  def permitted_transition_statuses(position_status)
-    case position_status.to_sym
-    when :pending_me then
-      [:withdraw]
-    when :pending_you then
-      [:accepted, :declined]
-    when :withdraw_me then
-      [:pending]
-    when :accepted_me then
-      [:disconnected]
-    when :accepted_you then
-      [:refused]
-    else
-      []
-    end
-  end
-
-  def validate_update_param(position_status, status)
-    validate_position_status(position_status)
-    unless permitted_transition_statuses(position_status).include? status.to_sym
-      raise ApiErrors::ParamsValidationError, status
-    end
   end
 
   def action_date_by_next_status(status)
