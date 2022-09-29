@@ -35,17 +35,19 @@ class TalksController < ApplicationController
   end
 
   def index_rooms
-    talk_ids = Talk.joins(:relation).merge(
-        Relation.where(user_from_id: @user.id).or(Relation.where(user_to_id: @user.id))
-    )
-    .group(:relation_id)
-    .select('talks.id as id, max(talks.updated_at) as updated_at')
-    .map { |talk| talk.id }
+    talk_ids = Talk.joins(:relation)
+      .merge(Relation.where(user_from_id: @user.id).or(Relation.where(user_to_id: @user.id)))
+      .group(:relation_id)
+      .select('talks.id as id, max(talks.updated_at) as updated_at')
+      .map { |talk| talk.id }
 
-    talks = Talk.where(id: talk_ids, status: :enabled).eager_load(:relation)
-    relations = talks.map { |talk| relation_response(talk.relation) }
-    resp = talks.zip(relations).map { |talk, relation| {relation: relation, last_talk: talk} }
+    talks = Talk.where(id: talk_ids, status: :enabled)
+      .eager_load(:relation)
+      .order(updated_at: :desc)
 
+    resp = pager_response(talks) do |talk|
+      { relation: relation_response(talk.relation), last_talk: talk }
+    end
     render :json => resp
   end
 
