@@ -35,3 +35,6 @@
 # Ignore uploaded images
 /public/uploads
 /public/fallback
+
+# simplecov
+coverage
