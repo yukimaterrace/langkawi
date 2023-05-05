@@ -6,7 +6,7 @@ class User < ApplicationRecord
 
   belongs_to :account
 
-  has_one :detail, class_name: 'UserDetail', :foreign_key => 'user_id', dependent: :destroy
+  has_one :detail, class_name: 'UserDetail', dependent: :destroy
 
   validates :user_type, presence: true
 end
