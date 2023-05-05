@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Relation < ApplicationRecord
   # pending 応募済み
   # withdraw 応募取り下げ
@@ -17,6 +19,6 @@ class Relation < ApplicationRecord
   has_many :talks, dependent: :destroy
 
   def extract_id_date
-    self.slice(:id, :action_a_date, :action_b_date, :action_c_date)
+    slice(:id, :action_a_date, :action_b_date, :action_c_date)
   end
 end
