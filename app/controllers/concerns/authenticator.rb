@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module Authenticator
   include ActionController::HttpAuthentication::Token::ControllerMethods
   include ActionController::HttpAuthentication::Token
 
   def authenticate
-    authenticate_with_http_token do |token, options|
+    authenticate_with_http_token do |token, _options|
       user_id = Session.get(token)
       @user = user_id && User.find(user_id)
       user_id.present?
@@ -11,15 +13,15 @@ module Authenticator
   end
 
   def require_admin
-    unless @user&.admin?
-      raise ApiErrors::AdminRequiredError
-    end
+    return if @user&.admin?
+
+    raise ApiErrors::AdminRequiredError
   end
 
   def require_owner
     id = params.require(:id)
-    unless @user.id == id.to_i
-      raise ApiErrors::OwnerRequiredError
-    end
+    return if @user.id == id.to_i
+
+    raise ApiErrors::OwnerRequiredError
   end
 end
