@@ -32,5 +32,10 @@ module Langkawi
     CarrierWave.configure do |config|
       config.asset_host = 'http://localhost:3000'
     end
+
+    config.generators.after_generate do |files|
+      parsable_files = files.filter { |file| file.end_with?('.rb') }
+      system("bundle exec rubocop -A --fail-level=E #{parsable_files.shelljoin}", exception: true)
+    end
   end
 end
