@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Relation < ApplicationRecord
   # pending 応募済み
   # withdraw 応募取り下げ
@@ -10,13 +12,13 @@ class Relation < ApplicationRecord
   # action_a_date pending移行時刻
   # action_b_date withdraw/accepted/declined移行時刻
   # action_c_date declined/disconnected移行時刻
-  
-  belongs_to :user_from, class_name: 'User', :foreign_key => 'user_from_id'
-  belongs_to :user_to, class_name: 'User', :foreign_key => 'user_to_id'
+
+  belongs_to :user_from, class_name: 'User'
+  belongs_to :user_to, class_name: 'User'
 
   has_many :talks, dependent: :destroy
 
   def extract_id_date
-    self.slice(:id, :action_a_date, :action_b_date, :action_c_date)
+    slice(:id, :action_a_date, :action_b_date, :action_c_date)
   end
 end

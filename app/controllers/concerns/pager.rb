@@ -1,5 +1,6 @@
-module Pager
+# frozen_string_literal: true
 
+module Pager
   def set_pager_params
     @page = params.required(:page).to_i
     @page_size = params.required(:page_size).to_i

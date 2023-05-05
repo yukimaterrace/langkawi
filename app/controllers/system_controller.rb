@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SystemController < ApplicationController
   skip_before_action :authenticate
 

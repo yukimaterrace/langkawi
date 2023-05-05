@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class Account < ApplicationRecord
-  enum account_type: { owned: 0,  google: 1, facebook: 2 }
+  enum account_type: { owned: 0, google: 1, facebook: 2 }
   enum status: { active: 0, deactive: 1, banned: 2 }
 
   has_one :user, dependent: :destroy

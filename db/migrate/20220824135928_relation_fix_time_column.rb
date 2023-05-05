@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RelationFixTimeColumn < ActiveRecord::Migration[7.0]
   def change
     rename_column :relations, :applied_date, :action_a_date

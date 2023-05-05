@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ImageUploader < CarrierWave::Uploader::Base
   # Include RMagick or MiniMagick support:
   # include CarrierWave::RMagick
@@ -14,9 +16,9 @@ class ImageUploader < CarrierWave::Uploader::Base
   end
 
   # Provide a default URL as a default if there hasn't been a file uploaded:
-  def default_url(*args)
+  def default_url(*_args)
     # For Rails 3.1+ asset pipeline compatibility:
-    ActionController::Base.helpers.asset_path("/fallback/" + [version_name, "default.png"].compact.join('_'))
+    ActionController::Base.helpers.asset_path("/fallback/#{[version_name, 'default.png'].compact.join('_')}")
   end
 
   # Process files as they are uploaded:
@@ -27,7 +29,7 @@ class ImageUploader < CarrierWave::Uploader::Base
   #   process resize_to_fit: [100, 100], if: :picture_a?
   # end
 
-  def picture_a? image
+  def picture_a?(_image)
     mounted_as.to_sym == :picture_a
   end
 
@@ -43,14 +45,14 @@ class ImageUploader < CarrierWave::Uploader::Base
   # Add an allowlist of extensions which are allowed to be uploaded.
   # For images you might use something like this:
   def extension_allowlist
-    %w(jpg jpeg gif png)
+    %w[jpg jpeg gif png]
   end
 
   # Override the filename of the uploaded files:
   # Avoid using model.id or version_name here, see uploader/store.rb for details.
   def filename
-    if original_filename
-      original_filename.scan(/\..+/).map { |s| "image#{s}" }.first || 'image'
-    end
+    return unless original_filename
+
+    original_filename.scan(/\..+/).map { |s| "image#{s}" }.first || 'image'
   end
 end

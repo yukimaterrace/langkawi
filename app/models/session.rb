@@ -1,24 +1,21 @@
-class Session < ApplicationRecord
+# frozen_string_literal: true
 
+class Session < ApplicationRecord
   def self.put(uuid, user_id)
-    session = Session.find_by(user_id: user_id)
-    if session.present? then
-      Session.update(session.id, :uuid => uuid, :expiration => expiration)
+    session = Session.find_by(user_id:)
+    if session.present?
+      Session.update(session.id, uuid:, expiration:)
     else
-      Session.create(:uuid => uuid, :user_id => user_id, :expiration => expiration)
+      Session.create(uuid:, user_id:, expiration:)
     end
   end
 
   def self.get(uuid)
-    session = Session.find_by(uuid: uuid)
-    if session.present? && session.expiration.after?(Time.current) then
-      session.user_id
-    else
-      nil
-    end
-  end
+    session = Session.find_by(uuid:)
+    return unless session.present? && session.expiration.after?(Time.current)
 
-  private
+    session.user_id
+  end
 
   def self.expiration
     Time.current.since(1.day)
