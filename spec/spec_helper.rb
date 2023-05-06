@@ -49,6 +49,7 @@ RSpec.configure do |config|
   config.shared_context_metadata_behavior = :apply_to_host_groups
 
   SimpleCov.start 'rails' do
+    formatter SimpleCov::Formatter::JSONFormatter
     minimum_coverage 90
     add_filter '/channels/'
     add_filter '/jobs/'
