@@ -50,7 +50,7 @@ RSpec.configure do |config|
   config.shared_context_metadata_behavior = :apply_to_host_groups
 
   SimpleCov.start 'rails' do
-    formatter SimpleCov::Formatter::Codecov
+    formatter SimpleCov::Formatter::Codecov if ENV['CI']
     minimum_coverage 1
     add_filter '/channels/'
     add_filter '/jobs/'

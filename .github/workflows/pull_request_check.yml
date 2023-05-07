@@ -17,7 +17,20 @@ jobs:
         with:
           bundler-cache: true
 
+      - name: Set up ReviewDog
+        uses: reviewdog/action-setup@v1
+        with:
+          reviewdog_version: latest
+
+      - name: Run RuboCop
+        env:
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          bundle exec rubocop | reviewdog -f=rubocop -reporter=github-pr-check
+
       - name: Run tests
+        env:
+          CI: true
         run: bundle exec rspec
 
       - name: Upload coverage reports to Codecov
