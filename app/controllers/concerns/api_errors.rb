@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ApiErrors
   class BaseError < StandardError
     attr_reader :error, :exception
@@ -12,7 +14,7 @@ module ApiErrors
     def initialize
       super
       @error = :unauthorized
-      @exception = "ログインが必要です。"
+      @exception = 'ログインが必要です。'
     end
   end
 
