@@ -29,6 +29,8 @@ jobs:
           bundle exec rubocop | reviewdog -f=rubocop -reporter=github-pr-check
 
       - name: Run tests
+        env:
+          CI: true
         run: bundle exec rspec
 
       - name: Upload coverage reports to Codecov
