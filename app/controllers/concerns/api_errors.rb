@@ -3,11 +3,6 @@
 module ApiErrors
   class BaseError < StandardError
     attr_reader :error, :exception
-
-    def initialize
-      super
-      raise NotImplementedError
-    end
   end
 
   class UnauthorizedError < BaseError
@@ -22,7 +17,7 @@ module ApiErrors
     def initialize
       super
       @error = :forbidden
-      @exception = '管理者権限が必要です。 '
+      @exception = '管理者権限が必要です。'
     end
   end
 
