@@ -137,6 +137,7 @@ GEM
     parallel (1.23.0)
     parser (3.2.2.1)
       ast (~> 2.4.1)
+    pg (1.5.3)
     public_suffix (5.0.0)
     puma (5.6.4)
       nio4r (~> 2.0)
@@ -223,7 +224,6 @@ GEM
       simplecov_json_formatter (~> 0.1)
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.4)
-    sqlite3 (1.4.4)
     ssrf_filter (1.0.8)
     strscan (3.0.4)
     thor (1.2.1)
@@ -245,6 +245,7 @@ DEPENDENCIES
   carrierwave (~> 2.0)
   codecov
   debug
+  pg (~> 1.5.3)
   puma (~> 5.0)
   rails (~> 7.0.3, >= 7.0.3.1)
   rspec-rails (~> 6.0.0)
@@ -252,7 +253,6 @@ DEPENDENCIES
   rubocop-rails
   rubocop-rspec
   simplecov
-  sqlite3 (~> 1.4)
   tzinfo-data
 
 RUBY VERSION

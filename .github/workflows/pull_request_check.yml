@@ -8,6 +8,21 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -26,12 +41,17 @@ jobs:
         env:
           REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          bundle exec rubocop | reviewdog -f=rubocop -reporter=github-pr-check
+          bundle exec rubocop | reviewdog -f=rubocop -reporter=github-pr-check -filter-mode=nofilter
 
       - name: Run tests
         env:
           CI: true
-        run: bundle exec rspec
+          RAILS_ENV: test
+          DATABASE_URL: postgres://postgres:postgres@localhost
+        run: |
+          bundle exec rails db:create
+          bundle exec rails db:migrate
+          bundle exec rspec
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
