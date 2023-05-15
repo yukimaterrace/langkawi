@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Session, type: :model do
@@ -6,19 +8,19 @@ RSpec.describe Session, type: :model do
 
   describe '.put' do
     context 'when session does not exist' do
-      before { Session.put(uuid, user_id) }
+      before { described_class.put(uuid, user_id) }
 
       it 'creates a new session' do
-        expect(Session.find_by(user_id: user_id)).to be_present
+        expect(described_class.find_by(user_id:)).to be_present
       end
 
       it 'sets the correct uuid' do
-        session = Session.find_by(user_id: user_id)
+        session = described_class.find_by(user_id:)
         expect(session.uuid).to eq(uuid)
       end
 
       it 'sets the correct expiration' do
-        session = Session.find_by(user_id: user_id)
+        session = described_class.find_by(user_id:)
         expect(session.expiration).to be > Time.current
       end
     end
@@ -27,16 +29,16 @@ RSpec.describe Session, type: :model do
       let(:new_uuid) { SecureRandom.uuid }
 
       before do
-        Session.create(uuid: uuid, user_id: user_id, expiration: Session.expiration)
-        Session.put(new_uuid, user_id)
+        described_class.create(uuid:, user_id:, expiration: described_class.expiration)
+        described_class.put(new_uuid, user_id)
       end
 
       it 'does not create a new session' do
-        expect(Session.where(user_id: user_id).count).to eq(1)
+        expect(described_class.where(user_id:).count).to eq(1)
       end
 
       it 'updates the uuid of the existing session' do
-        session = Session.find_by(user_id: user_id)
+        session = described_class.find_by(user_id:)
         expect(session.uuid).to eq(new_uuid)
       end
     end
@@ -45,21 +47,21 @@ RSpec.describe Session, type: :model do
   describe '.get' do
     context 'when session is not expired' do
       before do
-        Session.create(uuid: uuid, user_id: user_id, expiration: Session.expiration)
+        described_class.create(uuid:, user_id:, expiration: described_class.expiration)
       end
 
       it 'returns the user_id' do
-        expect(Session.get(uuid)).to eq(user_id)
+        expect(described_class.get(uuid)).to eq(user_id)
       end
     end
 
     context 'when session is expired' do
       before do
-        Session.create(uuid: uuid, user_id: user_id, expiration: 1.day.ago)
+        described_class.create(uuid:, user_id:, expiration: 1.day.ago)
       end
 
       it 'returns nil' do
-        expect(Session.get(uuid)).to be_nil
+        expect(described_class.get(uuid)).to be_nil
       end
     end
   end
