@@ -3,6 +3,7 @@
 require_relative 'boot'
 
 require 'rails/all'
+require 'cloudinary'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -29,8 +30,11 @@ module Langkawi
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use ActionDispatch::Session::CookieStore
 
-    CarrierWave.configure do |config|
-      config.asset_host = 'http://localhost:3000'
+    Cloudinary.config do |config|
+      config.cloud_name = ENV['CLOUDINARY_CLOUD_NAME']
+      config.api_key = ENV['CLOUDINARY_API_KEY']
+      config.api_secret = ENV['CLOUDINARY_API_SECRET']
+      config.secure = true
     end
 
     config.generators.after_generate do |files|

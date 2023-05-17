@@ -39,7 +39,7 @@ module ApiErrors
 
   class ParamsValidationError < BaseError
     def initialize(invalid_keys)
-      super
+      super()
       @error = :forbidden
       @exception = "不正なキー: #{invalid_keys}"
     end
