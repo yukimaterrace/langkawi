@@ -39,12 +39,15 @@ gem 'bootsnap', require: false
 # gem "rack-cors"
 
 gem 'carrierwave', '~> 2.0'
+gem 'cloudinary', '~> 1.25.0'
 
 gem 'rubocop', '~> 1.50', require: false
 gem 'rubocop-rails', require: false
 gem 'rubocop-rspec', require: false
 
-group :development, :test do
+gem 'dotenv-rails', groups: %i[development test]
+
+group :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'codecov', require: false
   gem 'debug', platforms: %i[mri mingw x64_mingw]
