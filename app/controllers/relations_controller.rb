@@ -35,7 +35,7 @@ class RelationsController < ApplicationController
     relation_exists = Relation.exists?(user_from_id: user_to_id, user_to_id: user_from_id)
     raise ApiErrors::CounterRelationExistError if relation_exists
 
-    render_relation_response(create_relation_for_pending_status)
+    render_relation_response(create_relation_for_pending_status(user_from_id, user_to_id))
   end
 
   def update
@@ -56,7 +56,7 @@ class RelationsController < ApplicationController
 
   private
 
-  def create_relation_for_pending_status
+  def create_relation_for_pending_status(user_from_id, user_to_id)
     Relation.create({
       user_from_id:,
       user_to_id:,
