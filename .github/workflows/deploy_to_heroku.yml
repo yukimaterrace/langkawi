@@ -17,9 +17,9 @@ jobs:
           heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
           heroku_email: ${{ secrets.HEROKU_EMAIL }}
         env:
-          RAILS_ENV: development
-          DATABASE: ${{ secrets.HEROKU_DEV_DATABASE }}
-          DATABASE_URL: ${{ secrets.HEROKU_DEV_DATABASE_URL }}
-          CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
-          CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
-          CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+          HD_RAILS_ENV: production
+          HD_DATABASE: ${{ secrets.HEROKU_DEV_DATABASE }}
+          HD_DATABASE_URL: ${{ secrets.HEROKU_DEV_DATABASE_URL }}
+          HD_CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
+          HD_CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+          HD_CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
