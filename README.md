@@ -1,24 +1,35 @@
-# README
+# Langkawi
+Matching Application API
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## 準備
+1. .env.testに以下の環境変数を設定してください。
 
-Things you may want to cover:
+```
+DATABASE_URL=
+```
 
-* Ruby version
+2. .env.developmentに以下の環境変数を設定してください。
 
-* System dependencies
+```
+DATABASE_HOST=
+DATABASE=
+DATABASE_USER=
+DATABASE_PASSWORD=
+DATABASE_URL=postgres://${DATABASE_USER}:${DATABASE_PASSWORD}@${DATABASE_HOST}/${DATABASE}
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
+```
 
-* Configuration
+## テスト
+ローカルのデータベースを使用します。
+```
+bin/rails db:schema:load RAILS_ENV=test
+bundle exec rspec
+```
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## 開発用サーバの起動
+```
+bin/rails db:schema:load
+bin/rails s
+```

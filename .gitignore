@@ -38,3 +38,6 @@
 
 # simplecov
 coverage
+
+# dotenv
+.env*
